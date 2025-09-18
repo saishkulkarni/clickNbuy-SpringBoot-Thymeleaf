@@ -3,6 +3,8 @@ package com.m15.clicknbuy.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.m15.clicknbuy.dto.UserDto;
+
 @Controller
 public class ViewController {
 
@@ -17,7 +19,7 @@ public class ViewController {
 	}
 
 	@GetMapping("/register")
-	public String loadRegister() {
+	public String loadRegister(UserDto userDto) {
 		return "register.html";
 	}
 }

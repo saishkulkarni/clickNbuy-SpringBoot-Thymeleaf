@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Enter OTP</title>
+</head>
+<body>
+	<h1>Enter OTP here</h1>
+	<h3 th:text="${success}"></h3>
+	<h3 th:text="${failure}"></h3>
+	<form action="/confirm-otp" method="post">
+		<input type="hidden" name="id" th:value="${id}"> <input
+			type="number" name="otp" placeholder="Enter OTP">
+		<button>Submit</button>
+	</form>
+</body>
+</html>
