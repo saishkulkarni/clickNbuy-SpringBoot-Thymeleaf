@@ -1,0 +1,80 @@
+<!-- HTML OTP Email Template -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width"/>
+  <title>Your OTP Code</title>
+  <style>
+    /* Some email clients strip <style>, but most respect inline styles.
+       Keep this minimal; main styling is inline below. */
+    @media only screen and (max-width:600px) {
+      .container { width: 100% !important; padding: 16px !important; }
+      .hero { padding: 20px !important; }
+      .otp { font-size: 28px !important; letter-spacing: 4px !important; }
+    }
+  </style>
+</head>
+<body style="margin:0; padding:0; background-color:#f4f6f8; font-family: Arial, Helvetica, sans-serif; -webkit-font-smoothing:antialiased;">
+  <!-- Preheader (hidden in email preview but used by clients) -->
+  <span style="display:none; font-size:1px; color:#f4f6f8; line-height:1px; max-height:0; max-width:0; opacity:0; overflow:hidden;">
+    Use this code to verify your account — it expires in {{expiry_minutes}} minutes.
+  </span>
+
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f6f8; padding: 24px 0;">
+    <tr>
+      <td align="center">
+        <table role="presentation" class="container" width="600" cellpadding="0" cellspacing="0" style="width:600px; max-width:600px; background:#ffffff; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.08); overflow:hidden;">
+          
+          <!-- Header -->
+          <tr>
+            <td style="padding:20px 28px; background: linear-gradient(90deg,#0b74de,#0b86e6); color:#ffffff;">
+              <h1 style="margin:0; font-size:20px; font-weight:600;">ClickNBuy</h1>
+            </td>
+          </tr>
+
+          <!-- Body / Hero -->
+          <tr>
+            <td class="hero" style="padding:28px; text-align:left; color:#111827;">
+              <p style="margin:0 0 12px 0; font-size:16px;">Hi <span th:text="${name}"></span>,</p>
+
+              <p style="margin:0 0 20px 0; font-size:15px; color:#374151;">
+                Use the verification code below to complete your action. This code will expire in <strong>60 minutes</strong>.
+              </p>
+
+              <!-- OTP block (prominent) -->
+              <div style="margin:18px 0 28px 0; text-align:center;">
+                <div style="display:inline-block; padding:20px 28px; border-radius:10px; background:#f3f8ff; border:1px solid #e6f0ff;">
+                  <span th:text="${otp}" class="otp" style="display:block; font-size:32px; font-weight:700; letter-spacing:6px; color:#0b74de;">
+                    
+                  </span>
+                </div>
+              </div>
+
+              <p style="margin:0 0 20px 0; font-size:14px; color:#6b7280;">
+                If you didn't request this, you can safely ignore this email. Never share your verification code with anyone.
+              </p>
+
+              <!-- Button alternative (optional) -->
+              <p style="margin:0 0 8px 0;">
+                <a href="#" style="display:inline-block; text-decoration:none; padding:10px 16px; border-radius:6px; border:1px solid #0b74de; background:#0b74de; color:#ffffff; font-weight:600; font-size:14px;">
+                  Verify now
+                </a>
+              </p>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="padding:18px 28px; background:#fbfbfd; color:#8b8f98; font-size:13px;">
+              <p style="margin:0 0 6px 0;">If you need help, contact us at <a href="mailto:{{support_email}}" style="color:#0b74de; text-decoration:none;">{{support_email}}</a>.</p>
+              <p style="margin:0;">© <span>ClickNBuy</span>. All rights reserved.</p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
