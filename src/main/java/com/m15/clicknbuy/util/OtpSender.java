@@ -7,6 +7,10 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import com.twilio.Twilio;
+import com.twilio.rest.api.v2010.account.Message;
+import com.twilio.type.PhoneNumber;
+
 import jakarta.mail.internet.MimeMessage;
 
 @Service
@@ -36,7 +40,10 @@ public class OtpSender {
 	}
 
 	public void sendOtpThruMobile(Long mobile, int otp, String name) {
-		System.out.println("Otp Sent to Mobile : " + mobile + " , OTP is : " + otp);
+		Twilio.init(System.getenv("TWILIO_ACCOUNT_SID"), System.getenv("TWILIO_AUTH_TOKEN"));
+
+		Message.creator(new PhoneNumber("+91" + mobile), new PhoneNumber(System.getenv("TWILIO_MOBILE")),
+				"Hello " + name + " Thanks for creating account your OTP is " + otp).create();
 	}
 
 }
