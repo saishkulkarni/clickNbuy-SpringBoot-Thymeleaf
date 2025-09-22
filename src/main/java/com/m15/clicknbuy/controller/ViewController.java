@@ -2,8 +2,6 @@ package com.m15.clicknbuy.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.m15.clicknbuy.dto.UserDto;
 
@@ -23,10 +21,5 @@ public class ViewController {
 	@GetMapping("/register")
 	public String loadRegister(UserDto userDto) {
 		return "register.html";
-	}
-
-	@RequestMapping("/home")
-	public String loadCustomerHome() {
-		return "customer-home.html";
 	}
 }

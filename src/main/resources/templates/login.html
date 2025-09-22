@@ -81,6 +81,7 @@ body {
 		<h3 th:text="${failure}"></h3>
 
 		<h3 th:if="${param.error}">Invalid Credentials</h3>
+		<h3 th:if="${param.logout}">Logout Success</h3>
 
 		<form action="/login" method="post">
 			<input type="email" placeholder="Email" name="username" required>
