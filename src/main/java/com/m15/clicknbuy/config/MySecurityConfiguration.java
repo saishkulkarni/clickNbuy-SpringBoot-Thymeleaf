@@ -20,9 +20,11 @@ public class MySecurityConfiguration {
 	@Bean
 	SecurityFilterChain chain(HttpSecurity http) throws Exception {
 		return http.csrf(csrf -> csrf.disable())
-				.authorizeHttpRequests(req -> req.requestMatchers("/", "/register","/confirm-otp" ,"/error", "/error/**", "/css/**",
-						"/favicon.ico", "/js/**", "/images/**", "/webjars/**").permitAll())
-				.httpBasic(httpBasic -> httpBasic.disable()).formLogin(form -> form.loginPage("/login").permitAll())
-				.build();
+				.authorizeHttpRequests(req -> req
+						.requestMatchers("/", "/register", "/confirm-otp", "/error", "/error/**", "/css/**",
+								"/favicon.ico", "/js/**", "/images/**", "/webjars/**")
+						.permitAll().requestMatchers("/home").hasRole("USER"))
+				.httpBasic(httpBasic -> httpBasic.disable())
+				.formLogin(form -> form.loginPage("/login").successForwardUrl("/home").permitAll()).build();
 	}
 }

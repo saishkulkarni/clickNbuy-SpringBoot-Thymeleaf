@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
 			otpSender.sendOtpThruEmail(userDto.getEmail(), otp, userDto.getName());
 			otpSender.sendOtpThruMobile(userDto.getMobile(), otp, userDto.getName());
 			User user = new User(null, userDto.getName(), userDto.getEmail(), encoder.encode(userDto.getPassword()),
-					userDto.getMobile(), userDto.getGender(), otp, false);
+					userDto.getMobile(), userDto.getGender(), otp, false, "ROLE_USER", null);
 			userDao.save(user);
 			map.put("id", user.getId());
 			return "otp.html";
