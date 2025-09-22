@@ -1,164 +1,205 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ClickNBuy - Home</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f9f9f9;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClickNBuy - Home</title>
+<style>
+body {
+	margin: 0;
+	font-family: Arial, sans-serif;
+	background: #f9f9f9;
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+}
 
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: #222;
-      color: white;
-      padding: 15px 30px;
-      position: sticky;
-      top: 0;
-    }
-    .navbar .logo {
-      font-size: 22px;
-      font-weight: bold;
-      cursor: pointer;
-      color: white;
-      text-decoration: none;
-    }
-    .navbar .auth-buttons button {
-      margin-left: 10px;
-      padding: 8px 16px;
-      border: none;
-      cursor: pointer;
-      border-radius: 4px;
-    }
-    .login { background: #007bff; color: white; }
-    .logout { background: #007bff; color: white; }
-    .register { background: #28a745; color: white; }
+.navbar {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background: #222;
+	color: white;
+	padding: 15px 30px;
+	position: sticky;
+	top: 0;
+}
 
-    .hero {
-      flex: 1;
-      padding: 20px;
-      max-width: 1200px;
-      margin: auto;
-    }
-    .controls {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 20px;
-    }
-    .controls input, .controls select {
-      padding: 10px;
-      font-size: 14px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
+.navbar .logo {
+	font-size: 22px;
+	font-weight: bold;
+	cursor: pointer;
+	color: white;
+	text-decoration: none;
+}
 
-    .product-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 20px;
-    }
-    .card {
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      padding: 15px;
-      text-align: center;
-    }
-    .card img {
-      width: 100%;
-      height: 150px;
-      object-fit: cover;
-      border-radius: 8px;
-    }
-    .card h3 {
-      margin: 10px 0;
-      font-size: 18px;
-    }
-    .card p {
-      font-size: 14px;
-      color: #666;
-    }
+.navbar .auth-buttons button {
+	margin-left: 10px;
+	padding: 8px 16px;
+	border: none;
+	cursor: pointer;
+	border-radius: 4px;
+}
 
-    /* Pagination */
-    .pagination {
-      display: flex;
-      justify-content: center;
-      margin: 20px 0;
-    }
-    .pagination button {
-      margin: 0 5px;
-      padding: 8px 12px;
-      border: none;
-      background: #007bff;
-      color: white;
-      border-radius: 5px;
-      cursor: pointer;
-    }
+.login {
+	background: #007bff;
+	color: white;
+}
 
-    /* Footer */
-    footer {
-      background: #222;
-      color: white;
-      text-align: center;
-      padding: 15px;
-      position: sticky;
-      bottom: 0;
-    }
-  </style>
+.logout {
+	background: #007bff;
+	color: white;
+}
+
+.register {
+	background: #28a745;
+	color: white;
+}
+
+.hero {
+	flex: 1;
+	padding: 20px;
+	max-width: 1200px;
+	margin: auto;
+}
+
+.controls {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 20px;
+}
+
+.controls input, .controls select {
+	padding: 10px;
+	font-size: 14px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+}
+
+.product-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+	gap: 20px;
+}
+
+.card {
+	background: white;
+	border-radius: 10px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	padding: 15px;
+	text-align: center;
+}
+
+.card img {
+	width: 100%;
+	height: 150px;
+	object-fit: cover;
+	border-radius: 8px;
+}
+
+.card h3 {
+	margin: 10px 0;
+	font-size: 18px;
+}
+
+.card p {
+	font-size: 14px;
+	color: #666;
+}
+
+/* Pagination */
+.pagination {
+	display: flex;
+	justify-content: center;
+	margin: 20px 0;
+}
+
+.pagination button {
+	margin: 0 5px;
+	padding: 8px 12px;
+	border: none;
+	background: #007bff;
+	color: white;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+/* Footer */
+footer {
+	background: #222;
+	color: white;
+	text-align: center;
+	padding: 15px;
+	position: sticky;
+	bottom: 0;
+}
+</style>
 </head>
 <body>
 
-  <nav class="navbar">
-    <a href="/" class="logo">ClickNBuy</a>
-    <div class="auth-buttons" >
-      <a href="/login"><button class="login">Login</button></a>
-      <a href="/register"><button class="register">Register</button></a>
-    </div>
-    <div class="auth-buttons">
-      <a href="/logout"><button class="logout">Logout</button></a>
-      </div>
-  </nav>
+	<nav class="navbar">
+		<a href="/" class="logo">ClickNBuy</a>
+		<div class="auth-buttons" sec:authorize="isAnonymous()">
+			<a href="/login"><button class="login">Login</button></a> <a
+				href="/register"><button class="register">Register</button></a>
+		</div>
+		<div class="auth-buttons" sec:authorize="isAuthenticated()">
+			<a href="/logout"><button class="logout">Logout</button></a>
+		</div>
+	</nav>
 
-  <section class="hero">
-    <div class="controls">
-      <input type="text" id="searchBar" placeholder="Search products...">
-      <select id="sortOptions">
-        <option value="default">Sort By</option>
-        <option value="name">Name</option>
-        <option value="priceLowHigh">Price: Low to High</option>
-        <option value="priceHighLow">Price: High to Low</option>
-      </select>
-    </div>
+	<section class="hero">
+		<div class="controls">
+			<input type="text" id="searchBar" placeholder="Search products...">
+			<select id="sortOptions">
+				<option value="default">Sort By</option>
+				<option value="name">Name</option>
+				<option value="priceLowHigh">Price: Low to High</option>
+				<option value="priceHighLow">Price: High to Low</option>
+			</select>
+		</div>
 
-    <div class="product-grid" id="productGrid">
-      <div class="card"><img src="https://via.placeholder.com/200" alt=""><h3>Product 1</h3><p>$20</p></div>
-      <div class="card"><img src="https://via.placeholder.com/200" alt=""><h3>Product 2</h3><p>$35</p></div>
-      <div class="card"><img src="https://via.placeholder.com/200" alt=""><h3>Product 3</h3><p>$15</p></div>
-      <div class="card"><img src="https://via.placeholder.com/200" alt=""><h3>Product 4</h3><p>$40</p></div>
-      <div class="card"><img src="https://via.placeholder.com/200" alt=""><h3>Product 5</h3><p>$25</p></div>
-    </div>
+		<div class="product-grid" id="productGrid">
+			<div class="card">
+				<img src="https://via.placeholder.com/200" alt="">
+				<h3>Product 1</h3>
+				<p>$20</p>
+			</div>
+			<div class="card">
+				<img src="https://via.placeholder.com/200" alt="">
+				<h3>Product 2</h3>
+				<p>$35</p>
+			</div>
+			<div class="card">
+				<img src="https://via.placeholder.com/200" alt="">
+				<h3>Product 3</h3>
+				<p>$15</p>
+			</div>
+			<div class="card">
+				<img src="https://via.placeholder.com/200" alt="">
+				<h3>Product 4</h3>
+				<p>$40</p>
+			</div>
+			<div class="card">
+				<img src="https://via.placeholder.com/200" alt="">
+				<h3>Product 5</h3>
+				<p>$25</p>
+			</div>
+		</div>
 
-    <!-- Pagination -->
-    <div class="pagination">
-      <button>&laquo; Prev</button>
-      <button>1</button>
-      <button>2</button>
-      <button>3</button>
-      <button>Next &raquo;</button>
-    </div>
-  </section>
+		<!-- Pagination -->
+		<div class="pagination">
+			<button>&laquo; Prev</button>
+			<button>1</button>
+			<button>2</button>
+			<button>3</button>
+			<button>Next &raquo;</button>
+		</div>
+	</section>
 
-  <footer>
-    <p>&copy; 2025 ClickNBuy. All Rights Reserved.</p>
-  </footer>
+	<footer>
+		<p>&copy; 2025 ClickNBuy. All Rights Reserved.</p>
+	</footer>
 
 </body>
 </html>
