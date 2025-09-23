@@ -127,6 +127,7 @@ public class UserServiceImpl implements UserService {
 				if (user.getCreatedTime().plusMinutes(5).isAfter(LocalDateTime.now())) {
 					user.setPassword(encoder.encode(passwordDto.getPassword()));
 					user.setOtp(0);
+					user.setVerified(true);
 					userDao.save(user);
 					session.setAttribute("success", "Password Reset Success");
 					return "redirect:/login";

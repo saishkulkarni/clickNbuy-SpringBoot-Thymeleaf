@@ -33,7 +33,6 @@ public class ViewController {
 	public String loadOtop(HttpSession session, ModelMap map) {
 		if (session.getAttribute("id") != null) {
 			map.put("id", session.getAttribute("id"));
-			session.removeAttribute("id");
 		}
 		manageMessage(session, map);
 		return "otp.html";
@@ -49,7 +48,6 @@ public class ViewController {
 	public String loadResetPassword(PasswordDto passwordDto, HttpSession session, ModelMap map) {
 		if (session.getAttribute("id") != null) {
 			map.put("id", session.getAttribute("id"));
-			session.removeAttribute("id");
 		}
 		manageMessage(session, map);
 		return "reset-password.html";
