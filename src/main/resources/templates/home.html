@@ -1,205 +1,202 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" th:lang="${#locale}">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ClickNBuy - Home</title>
+
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
 <style>
+html, body {
+    height: 100%;
+}
 body {
-	margin: 0;
-	font-family: Arial, sans-serif;
-	background: #f9f9f9;
-	display: flex;
-	flex-direction: column;
-	min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #f8f9fa;
 }
-
-.navbar {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	background: #222;
-	color: white;
-	padding: 15px 30px;
-	position: sticky;
-	top: 0;
+main {
+    flex: 1 0 auto;
 }
-
-.navbar .logo {
-	font-size: 22px;
-	font-weight: bold;
-	cursor: pointer;
-	color: white;
-	text-decoration: none;
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.6rem;
 }
-
-.navbar .auth-buttons button {
-	margin-left: 10px;
-	padding: 8px 16px;
-	border: none;
-	cursor: pointer;
-	border-radius: 4px;
-}
-
-.login {
-	background: #007bff;
-	color: white;
-}
-
-.logout {
-	background: #007bff;
-	color: white;
-}
-
-.register {
-	background: #28a745;
-	color: white;
-}
-
-.hero {
-	flex: 1;
-	padding: 20px;
-	max-width: 1200px;
-	margin: auto;
-}
-
-.controls {
-	display: flex;
-	justify-content: space-between;
-	margin-bottom: 20px;
-}
-
-.controls input, .controls select {
-	padding: 10px;
-	font-size: 14px;
-	border: 1px solid #ccc;
-	border-radius: 5px;
-}
-
-.product-grid {
-	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-	gap: 20px;
-}
-
 .card {
-	background: white;
-	border-radius: 10px;
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-	padding: 15px;
-	text-align: center;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
 }
-
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
 .card img {
-	width: 100%;
-	height: 150px;
-	object-fit: cover;
-	border-radius: 8px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    height: 180px;
+    object-fit: cover;
 }
-
-.card h3 {
-	margin: 10px 0;
-	font-size: 18px;
+.card-title {
+    font-size: 1rem;
+    font-weight: 600;
 }
-
-.card p {
-	font-size: 14px;
-	color: #666;
+.card-text {
+    font-size: 0.9rem;
+    color: #555;
 }
-
-/* Pagination */
-.pagination {
-	display: flex;
-	justify-content: center;
-	margin: 20px 0;
+.toast-container {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1055;
 }
-
-.pagination button {
-	margin: 0 5px;
-	padding: 8px 12px;
-	border: none;
-	background: #007bff;
-	color: white;
-	border-radius: 5px;
-	cursor: pointer;
+.search-sort-container .btn {
+    height: 100%;
 }
-
-/* Footer */
-footer {
-	background: #222;
-	color: white;
-	text-align: center;
-	padding: 15px;
-	position: sticky;
-	bottom: 0;
+.pagination .page-link {
+    border-radius: 50% !important;
+    margin: 0 5px;
 }
 </style>
 </head>
 <body>
 
-	<nav class="navbar">
-		<a href="/" class="logo">ClickNBuy</a>
-		<div class="auth-buttons" sec:authorize="isAnonymous()">
-			<a href="/login"><button class="login">Login</button></a> <a
-				href="/register"><button class="register">Register</button></a>
-		</div>
-		<div class="auth-buttons" sec:authorize="isAuthenticated()">
-			<a href="/logout"><button class="logout">Logout</button></a>
-		</div>
-	</nav>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm">
+    <div class="container">
+        <a class="navbar-brand" href="/">ClickNBuy</a>
+        <div class="d-flex align-items-center">
+            <!-- Anonymous -->
+            <div class="d-none d-lg-flex" sec:authorize="isAnonymous()">
+                <a href="/login" class="btn btn-primary me-2">Login</a>
+                <a href="/register" class="btn btn-success">Register</a>
+            </div>
 
-	<section class="hero">
-		<div class="controls">
-			<input type="text" id="searchBar" placeholder="Search products...">
-			<select id="sortOptions">
-				<option value="default">Sort By</option>
-				<option value="name">Name</option>
-				<option value="priceLowHigh">Price: Low to High</option>
-				<option value="priceHighLow">Price: High to Low</option>
-			</select>
-		</div>
+            <!-- Authenticated User -->
+            <div class="d-none d-lg-flex align-items-center" sec:authorize="hasRole('USER')">
+                <a href="/cart" class="btn btn-info me-2">
+                    <i class="bi bi-cart"></i> Cart
+                </a>
+                <a href="/logout" class="btn btn-outline-light">Logout</a>
+            </div>
 
-		<div class="product-grid" id="productGrid">
-			<div class="card">
-				<img src="https://via.placeholder.com/200" alt="">
-				<h3>Product 1</h3>
-				<p>$20</p>
-			</div>
-			<div class="card">
-				<img src="https://via.placeholder.com/200" alt="">
-				<h3>Product 2</h3>
-				<p>$35</p>
-			</div>
-			<div class="card">
-				<img src="https://via.placeholder.com/200" alt="">
-				<h3>Product 3</h3>
-				<p>$15</p>
-			</div>
-			<div class="card">
-				<img src="https://via.placeholder.com/200" alt="">
-				<h3>Product 4</h3>
-				<p>$40</p>
-			</div>
-			<div class="card">
-				<img src="https://via.placeholder.com/200" alt="">
-				<h3>Product 5</h3>
-				<p>$25</p>
-			</div>
-		</div>
+            <!-- Admin -->
+            <div class="d-none d-lg-flex" sec:authorize="hasRole('ADMIN')">
+                <a href="/admin/add-product" class="btn btn-warning me-2">Add Product</a>
+                <a href="/logout" class="btn btn-outline-light">Logout</a>
+            </div>
+        </div>
+    </div>
+</nav>
 
-		<!-- Pagination -->
-		<div class="pagination">
-			<button>&laquo; Prev</button>
-			<button>1</button>
-			<button>2</button>
-			<button>3</button>
-			<button>Next &raquo;</button>
-		</div>
-	</section>
+<main class="container my-5">
 
-	<footer>
-		<p>&copy; 2025 ClickNBuy. All Rights Reserved.</p>
-	</footer>
+    <!-- Search and Sort -->
+    <div class="row mb-4 search-sort-container">
+        <div class="col-md-6 mb-2 d-flex">
+            <input type="text" class="form-control me-2" placeholder="Search products...">
+            <button class="btn btn-primary">Search</button>
+        </div>
+        <div class="col-md-6 mb-2 d-flex">
+            <select class="form-select me-2">
+                <option value="default">Sort By</option>
+                <option value="name">Name</option>
+                <option value="priceLowHigh">Price: Low to High</option>
+                <option value="priceHighLow">Price: High to Low</option>
+            </select>
+            <button class="btn btn-secondary">Sort</button>
+        </div>
+    </div>
 
+    <!-- Products Grid -->
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+        <!-- Product 1 -->
+        <div class="col">
+            <div class="card h-100 text-center">
+                <img src="https://images.unsplash.com/photo-1606813908481-4cfa2d59f7e8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=200" class="card-img-top" alt="Running Sneakers">
+                <div class="card-body">
+                    <h5 class="card-title">Running Sneakers</h5>
+                    <p class="card-text">$75</p>
+
+                    <a href="/login" class="btn btn-primary w-100 mb-1" sec:authorize="isAnonymous()">Login to Buy</a>
+                    <a href="#" class="btn btn-success w-100 mb-1" sec:authorize="hasRole('USER')">Add to Cart</a>
+
+                    <div class="d-flex justify-content-between" sec:authorize="hasRole('ADMIN')">
+                        <a href="#" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="#" class="btn btn-danger btn-sm">Delete</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Product 2 -->
+        <div class="col">
+            <div class="card h-100 text-center">
+                <img src="https://images.unsplash.com/photo-1600185365204-7c8b36c1b5b3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=200" class="card-img-top" alt="Luxury Watch">
+                <div class="card-body">
+                    <h5 class="card-title">Luxury Watch</h5>
+                    <p class="card-text">$250</p>
+                    <a href="/login" class="btn btn-primary w-100 mb-1" sec:authorize="isAnonymous()">Login to Buy</a>
+                    <a href="#" class="btn btn-success w-100 mb-1" sec:authorize="hasRole('USER')">Add to Cart</a>
+                    <div class="d-flex justify-content-between" sec:authorize="hasRole('ADMIN')">
+                        <a href="#" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="#" class="btn btn-danger btn-sm">Delete</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Add more products similarly -->
+    </div>
+
+    <!-- Pagination -->
+    <nav aria-label="Page navigation" class="mt-4">
+        <ul class="pagination justify-content-center">
+            <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
+        </ul>
+    </nav>
+
+</main>
+
+<!-- Footer -->
+<footer class="bg-dark text-light py-3 text-center mt-auto">
+    &copy; 2025 ClickNBuy. All Rights Reserved.
+</footer>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script th:inline="javascript">
+    let successMessage = [[${success != null}]] ? '[[${success}]]' : null;
+    let errorMessage = [[${error != null}]] ? '[[${error}]]' : null;
+
+    function showToast(message, type='success') {
+        if (!message) return;
+        const toastHTML = `
+        <div class="toast align-items-center text-bg-${type} border-0 mb-2" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">${message}</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>`;
+        const container = document.getElementById('toastContainer');
+        container.insertAdjacentHTML('beforeend', toastHTML);
+        const toastEl = container.lastElementChild;
+        const toast = new bootstrap.Toast(toastEl);
+        toast.show();
+    }
+
+    showToast(successMessage, 'success');
+    showToast(errorMessage, 'danger');
+</script>
 </body>
 </html>

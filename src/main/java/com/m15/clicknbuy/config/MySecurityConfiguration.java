@@ -20,7 +20,10 @@ public class MySecurityConfiguration {
 	@Bean
 	SecurityFilterChain chain(HttpSecurity http) throws Exception {
 		return http.csrf(csrf -> csrf.disable())
-				.authorizeHttpRequests(req -> req.requestMatchers("/", "/register", "/confirm-otp").permitAll())
+				.authorizeHttpRequests(
+						req -> req.requestMatchers("/", "/register", "/otp", "/resend-otp", "/forgot-password","/reset-password")
+								.permitAll().requestMatchers("/user/**").hasRole("USER").requestMatchers("/admin/**")
+								.hasRole("ADMIN").anyRequest().authenticated())
 				.formLogin(form -> form.loginPage("/login").defaultSuccessUrl("/", true).permitAll())
 				.logout(logout -> logout.logoutUrl("/logout").logoutSuccessUrl("/login?logout").permitAll()).build();
 	}

@@ -36,14 +36,19 @@ public class OtpSender {
 			helper.setText(emailMessage, true);
 			mailSender.send(message);
 		} catch (Exception e) {
+			System.err.println("The OTP is : " + otp);
 		}
 	}
 
 	public void sendOtpThruMobile(Long mobile, int otp, String name) {
-		Twilio.init(System.getenv("TWILIO_ACCOUNT_SID"), System.getenv("TWILIO_AUTH_TOKEN"));
+		try {
+			Twilio.init(System.getenv("TWILIO_ACCOUNT_SID"), System.getenv("TWILIO_AUTH_TOKEN"));
 
-		Message.creator(new PhoneNumber("+91" + mobile), new PhoneNumber(System.getenv("TWILIO_MOBILE")),
-				"Hello " + name + " Thanks for creating account your OTP is " + otp).create();
+			Message.creator(new PhoneNumber("+91" + mobile), new PhoneNumber(System.getenv("TWILIO_MOBILE")),
+					"Hello " + name + " Thanks for creating account your OTP is " + otp).create();
+		} catch (Exception e) {
+			System.err.println("The OTP is : " + otp);
+		}
 	}
 
 }
