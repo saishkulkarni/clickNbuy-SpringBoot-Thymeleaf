@@ -1,20 +1,31 @@
 package com.m15.clicknbuy.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.m15.clicknbuy.dto.PasswordDto;
 import com.m15.clicknbuy.dto.UserDto;
+import com.m15.clicknbuy.entity.Product;
+import com.m15.clicknbuy.repository.ProductRepository;
 
 import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class ViewController {
 
+	@Autowired
+	ProductRepository productRepository;
+
 	@GetMapping("/")
 	public String loadHome(HttpSession session, ModelMap map) {
 		manageMessage(session, map);
+		List<Product> products = productRepository.findAll();
+		if (!products.isEmpty())
+			map.put("products", products);
 		return "home.html";
 	}
 

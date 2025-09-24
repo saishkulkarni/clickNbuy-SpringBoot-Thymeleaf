@@ -12,7 +12,7 @@ import lombok.Data;
 
 @Data
 public class ProductDto {
-	@Size(min = 3, max = 20, message = "* Name should be 3~20 charecters")
+	@Size(min = 3, max = 50, message = "* Name should be 3~50 charecters")
 	private String name;
 	@Min(value = 49, message = "* Product Price Should be atleast 49 Rs.")
 	@Max(value = 100000, message = "* Product Price Should be atmost 100000 Rs.")
