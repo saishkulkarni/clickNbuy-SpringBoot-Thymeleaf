@@ -1,10 +1,13 @@
 package com.m15.clicknbuy.controller;
 
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -45,5 +48,15 @@ public class UserController {
 	public String resetPassword(@Valid PasswordDto passwordDto, @RequestParam Long id, BindingResult result,
 			HttpSession session, ModelMap map) {
 		return userService.resetPassword(passwordDto, result, session, id, map);
+	}
+
+	@GetMapping("/user/add-cart/{id}")
+	public String addToCart(@PathVariable Long id, HttpSession session,Principal principal) {
+		return userService.addToCart(id, session,principal);
+	}
+	
+	@GetMapping("/user/cart")
+	public String viewCart(HttpSession session,Principal principal, ModelMap map) {
+		return userService.viewCart(session,principal,map);
 	}
 }

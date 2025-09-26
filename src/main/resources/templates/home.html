@@ -78,7 +78,7 @@ main {
 
             <!-- Authenticated User -->
             <div class="d-none d-lg-flex align-items-center" sec:authorize="hasRole('USER')">
-                <a href="/customer/cart" class="btn btn-info me-2">
+                <a href="/user/cart" class="btn btn-info me-2">
                     <i class="bi bi-cart"></i> Cart
                 </a>
                 <a href="/logout" class="btn btn-outline-light">Logout</a>
@@ -121,16 +121,17 @@ main {
                 <div class="card-body">
                     <h5 class="card-title" th:text="${product.name}"></h5>
                     <p class="card-text" th:text="${product.price+' &#8377'}"></p>
-					<p th:text="${product.getDescription}">
-					<p th:text="${product.category}">
-					<p th:text="${product.getDescription}">
-                    <a href="/login" class="btn btn-primary w-100 mb-1" sec:authorize="isAnonymous()">Login to Buy</a>
-                    <a href="#" class="btn btn-success w-100 mb-1" sec:authorize="hasRole('USER')">Add to Cart</a>
+					<p th:text="${product.description}"></p>
+					<p th:text="${product.category}"></p>
+					<p th:text="${product.stock}"></p>
+                    
+					<a href="/login" class="btn btn-primary w-100 mb-1" sec:authorize="isAnonymous()">Login to Buy</a>
+					<a th:if="${product.stock<1}" disabled="disabled" class="btn btn-danger w-100 mb-1"  sec:authorize="hasRole('USER')">Out of Stock</a>
+					<a th:if="${product.stock>=1}" th:href="'/user/add-cart/'+${product.id}" class="btn btn-success w-100 mb-1" sec:authorize="hasRole('USER')">Add to Cart</a>
 
                     <div class="d-flex justify-content-between" sec:authorize="hasRole('ADMIN')">
                          <a th:href="'/admin/edit/'+${product.id}" class="btn btn-warning btn-sm">Edit</a>
                         <a th:href="'/admin/delete/'+${product.id}" class="btn btn-danger btn-sm">Delete</a>
-       
                     </div>
                 </div>
             </div>
