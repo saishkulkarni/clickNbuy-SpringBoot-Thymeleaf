@@ -1,86 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ClickNBuy - Cart</title>
-
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-        h1 {
-            font-weight: bold;
-        }
-        .table th, .table td {
-            vertical-align: middle;
-        }
-    </style>
+    <title>Document</title>
 </head>
+
 <body>
+    <div align="center">
+        <h1>Cart Items</h1>
 
-<!-- Navbar (optional: include same navbar from home page) -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm">
-    <div class="container">
-        <a class="navbar-brand" href="/">ClickNBuy</a>
-        <div class="d-flex align-items-center">
-            <a href="/user/cart" class="btn btn-info me-2">
-                <i class="bi bi-cart"></i> Cart
-            </a>
-            <a href="/logout" class="btn btn-outline-light">Logout</a>
-        </div>
-    </div>
-</nav>
-
-<!-- Main Container -->
-<main class="container my-5">
-    <h1 class="mb-4 text-center">Your Shopping Cart</h1>
-
-    <div th:if="${#lists.isEmpty(items)}" class="alert alert-warning text-center">
-        Your cart is empty.
-    </div>
-
-    <div th:unless="${#lists.isEmpty(items)}" class="table-responsive">
-        <table class="table table-bordered table-hover align-middle shadow-sm bg-white">
-            <thead class="table-dark">
-                <tr>
-                    <th>Product Name</th>
-                    <th>Price (₹)</th>
-                    <th>Quantity</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="item : ${items}">
-                    <td th:text="${item.product.name}"></td>
-                    <td th:text="${item.product.price}"></td>
-                    <td th:text="${item.quantity}"></td>
-                    <td>
-                        <div class="d-flex gap-2">
-                            <a th:href="'/user/add-cart/'+${item.product.id}" class="btn btn-success btn-sm">
-                                <i class="bi bi-plus"></i> Add
-                            </a>
-                            <a th:href="'/user/remove-cart/'+${item.product.id}" class="btn btn-danger btn-sm">
-                                <i class="bi bi-trash"></i> Remove
-                            </a>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
+        <table border="1">
+            <tr>
+                <th>Name</th>
+                <th>Image</th>
+                <th>Stock</th>
+                <th>Price</th>
+                <th>Reduce</th>
+                <th>Quantity</th>
+                <th>Increase</th>
+                <th>Price</th>
+            </tr>
+            <tr th:each="item:${items}">
+                <td th:text="${item.product.name}"></td>
+                <td><img th:src="${item.product.imageLink}" height="100px" width="100px"></td>
+                <td th:text="${item.product.stock}"></td>
+                <td th:text="${item.product.price+'&#8377'}"></td>
+                <td><a th:href="'/user/cart/decrease/'+${item.id}"><button>-</button></a></td>
+                <td th:text="${item.quantity}"></td>
+                <td><a th:href="'/user/cart/increase/'+${item.id}"><button>+</button></a></td>
+                <td th:text="${item.quantity*item.product.price+'&#8377'}"></td>
+            </tr>
+            <tr>
+                <td colspan="7"></td>
+                <td>Total Price: 
+					<span th:text="${total+'&#8377'}"></span>
+				</td> 
+            </tr>
+			<tr>
+			                <td colspan="7"></td>
+			                <td><a href="/user/checkout"><button>Proceed to Checkout</button></a>
+							</td> 
+			            </tr>
         </table>
+		<br>
+        <a href="/"><button>Back</button></a>
     </div>
-</main>
+	
+	<!-- Toast Container -->
+	<div class="toast-container" id="toastContainer"></div>
 
-<!-- Footer -->
-<footer class="bg-dark text-light py-3 text-center mt-auto">
-    &copy; 2025 ClickNBuy. All Rights Reserved.
-</footer>
+	<!-- Bootstrap JS -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+	<script th:inline="javascript">
+	    let successMessage = [[${success != null}]] ? '[[${success}]]' : null;
+	    let errorMessage = [[${error != null}]] ? '[[${error}]]' : null;
+
+	    function showToast(message, type='success') {
+	        if (!message) return;
+	        const toastHTML = `
+	        <div class="toast align-items-center text-bg-${type} border-0 mb-2" role="alert" aria-live="assertive" aria-atomic="true">
+	            <div class="d-flex">
+	                <div class="toast-body">${message}</div>
+	                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+	            </div>
+	        </div>`;
+	        const container = document.getElementById('toastContainer');
+	        container.insertAdjacentHTML('beforeend', toastHTML);
+	        const toastEl = container.lastElementChild;
+	        const toast = new bootstrap.Toast(toastEl);
+	        toast.show();
+	    }
+
+	    showToast(successMessage, 'success');
+	    showToast(errorMessage, 'danger');
+	</script>
 </body>
+
 </html>

@@ -218,7 +218,43 @@ public class UserServiceImpl implements UserService {
 				session.removeAttribute("error");
 			}
 			map.put("items", items);
+			map.put("total", items.stream().mapToDouble(x -> x.getProduct().getPrice() * x.getQuantity()).sum());
 			return "cart.html";
+		}
+	}
+
+	@Override
+	public String increase(HttpSession session, Long id, ModelMap map) {
+		CartItem item = itemRepository.findById(id).orElseThrow();
+		Product product = item.getProduct();
+		if (product.getStock() > 0) {
+			item.setQuantity(item.getQuantity() + 1);
+			itemRepository.save(item);
+			product.setStock(product.getStock() - 1);
+			productRepository.save(product);
+			session.setAttribute("success", "Item Increased Success");
+			return "redirect:/user/cart";
+		} else {
+			session.setAttribute("error", "Not Enough Stock");
+			return "redirect:/user/cart";
+		}
+	}
+
+	@Override
+	public String decrease(HttpSession session, Long id, ModelMap map) {
+		CartItem item = itemRepository.findById(id).orElseThrow();
+		Product product = item.getProduct();
+		if (item.getQuantity() > 1) {
+			item.setQuantity(item.getQuantity() - 1);
+			itemRepository.save(item);
+			product.setStock(product.getStock() + 1);
+			productRepository.save(product);
+			session.setAttribute("success", "Item Decreased Success");
+			return "redirect:/user/cart";
+		} else {
+			itemRepository.delete(item);
+			session.setAttribute("success", "Item Decreased Success");
+			return "redirect:/user/cart";
 		}
 	}
 
