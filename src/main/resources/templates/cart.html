@@ -1,82 +1,329 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" th:lang="${#locale}">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Shopping Cart - ClickNBuy</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #4F46E5;
+            --primary-hover: #4338CA;
+            --secondary-color: #10B981;
+            --accent-color: #F59E0B;
+            --danger-color: #EF4444;
+            --dark-color: #111827;
+            --gray-color: #6B7280;
+            --light-gray: #F3F4F6;
+            --white: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--light-gray);
+            color: var(--dark-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cart-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .cart-item {
+            background: white;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .cart-item:hover {
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .cart-item img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 0.5rem;
+        }
+
+        .quantity-control {
+            display: inline-flex;
+            align-items: center;
+            background: var(--light-gray);
+            border-radius: 0.5rem;
+            padding: 0.25rem;
+        }
+
+        .quantity-btn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border: none;
+            border-radius: 0.375rem;
+            color: var(--primary-color);
+            font-size: 1.25rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .quantity-btn:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .quantity-text {
+            width: 40px;
+            text-align: center;
+            font-weight: 600;
+            margin: 0 0.5rem;
+        }
+
+        .item-price {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .cart-summary {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            position: sticky;
+            top: 1rem;
+        }
+
+        .checkout-btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+            border: none;
+            width: 100%;
+            padding: 1rem;
+            color: white;
+            font-weight: 600;
+            border-radius: 0.5rem;
+            transition: transform 0.2s ease;
+        }
+
+        .checkout-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .back-btn {
+            color: var(--white);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            backdrop-filter: blur(8px);
+            transition: all 0.2s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-4px);
+        }
+
+        .back-btn i {
+            transition: transform 0.2s ease;
+        }
+
+        .back-btn:hover i {
+            transform: translateX(-4px);
+        }
+
+        .alert-container {
+            position: fixed;
+            top: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1050;
+            min-width: 300px;
+            max-width: 500px;
+            width: auto;
+        }
+
+        .custom-alert {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border: none;
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            animation: slideDown 0.3s ease-out forwards;
+        }
+
+        .alert-success {
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .alert-danger {
+            border-left: 4px solid var(--danger-color);
+        }
+
+        .custom-alert i {
+            font-size: 1.25rem;
+            margin-right: 0.75rem;
+        }
+
+        .custom-alert .message {
+            font-weight: 500;
+            flex: 1;
+        }
+
+        .custom-alert .btn-close {
+            font-size: 0.875rem;
+            padding: 0.5rem;
+            margin: -0.5rem -0.5rem -0.5rem 0.5rem;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <div align="center">
-        <h1>Cart Items</h1>
+    <!-- Cart Header -->
+    <div class="cart-header">
+        <div class="container">
+            <div class="d-flex flex-column">
+                <a href="/" class="back-btn">
+                    <i class="bi bi-arrow-left-short fs-4"></i>
+                    <span>Continue Shopping</span>
+                </a>
+                <h1 class="display-6 fw-bold mb-0">Shopping Cart</h1>
+            </div>
+        </div>
+    </div>
 
-        <table border="1">
-            <tr>
-                <th>Name</th>
-                <th>Image</th>
-                <th>Stock</th>
-                <th>Price</th>
-                <th>Reduce</th>
-                <th>Quantity</th>
-                <th>Increase</th>
-                <th>Price</th>
-            </tr>
-            <tr th:each="item:${items}">
-                <td th:text="${item.product.name}"></td>
-                <td><img th:src="${item.product.imageLink}" height="100px" width="100px"></td>
-                <td th:text="${item.product.stock}"></td>
-                <td th:text="${item.product.price+'&#8377'}"></td>
-                <td><a th:href="'/user/cart/decrease/'+${item.id}"><button>-</button></a></td>
-                <td th:text="${item.quantity}"></td>
-                <td><a th:href="'/user/cart/increase/'+${item.id}"><button>+</button></a></td>
-                <td th:text="${item.quantity*item.product.price+'&#8377'}"></td>
-            </tr>
-            <tr>
-                <td colspan="7"></td>
-                <td>Total Price: 
-					<span th:text="${total+'&#8377'}"></span>
-				</td> 
-            </tr>
-			<tr>
-			                <td colspan="7"></td>
-			                <td><a href="/user/checkout"><button>Proceed to Checkout</button></a>
-							</td> 
-			            </tr>
-        </table>
-		<br>
-        <a href="/"><button>Back</button></a>
+    <!-- Cart Content -->
+    <div class="container mb-5">
+        <div class="row g-4">
+            <!-- Cart Items -->
+            <div class="col-lg-8">
+                <!-- Cart Items List -->
+                <div class="cart-items">
+                    <div class="cart-item p-3" th:each="item:${items}">
+                        <div class="row align-items-center">
+                            <!-- Product Image -->
+                            <div class="col-md-2">
+                                <img th:src="${item.product.imageLink}" th:alt="${item.product.name}" class="img-fluid">
+                            </div>
+                            <!-- Product Details -->
+                            <div class="col-md-4">
+                                <h5 class="mb-1" th:text="${item.product.name}"></h5>
+                                <p class="text-muted mb-0">Stock: <span th:text="${item.product.stock}"></span></p>
+                            </div>
+                            <!-- Quantity Controls -->
+                            <div class="col-md-3">
+                                <div class="quantity-control">
+                                    <a th:href="'/user/cart/decrease/'+${item.id}" class="quantity-btn">
+                                        <i class="bi bi-dash"></i>
+                                    </a>
+                                    <span class="quantity-text" th:text="${item.quantity}"></span>
+                                    <a th:href="'/user/cart/increase/'+${item.id}" class="quantity-btn">
+                                        <i class="bi bi-plus"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <!-- Price -->
+                            <div class="col-md-3 text-end">
+                                <p class="item-price mb-0">₹<span th:text="${#numbers.formatDecimal(item.quantity*item.product.price, 0, 2)}"></span></p>
+                                <small class="text-muted">₹<span th:text="${#numbers.formatDecimal(item.product.price, 0, 2)}"></span> each</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cart Summary -->
+            <div class="col-lg-4">
+                <div class="cart-summary">
+                    <h4 class="mb-4">Order Summary</h4>
+                    <div class="d-flex justify-content-between mb-3">
+                        <span>Subtotal</span>
+                        <span class="fw-bold">₹<span th:text="${#numbers.formatDecimal(total, 0, 2)}"></span></span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-3">
+                        <span>Shipping</span>
+                        <span class="text-success">Free</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between mb-4">
+                        <span class="fw-bold">Total</span>
+                        <span class="fw-bold fs-5">₹<span th:text="${#numbers.formatDecimal(total, 0, 2)}"></span></span>
+                    </div>
+                    <a href="/user/checkout" class="checkout-btn btn btn-primary">
+                        Proceed to Checkout
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 	
-	<!-- Toast Container -->
-	<div class="toast-container" id="toastContainer"></div>
+    <!-- Alert Container -->
+    <div class="alert-container">
+        <!-- Success Alert -->
+        <div th:if="${success}" 
+             class="custom-alert alert-success" 
+             role="alert">
+            <i class="bi bi-check-circle-fill text-success"></i>
+            <span class="message" th:text="${success}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
 
-	<!-- Bootstrap JS -->
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Error Alert -->
+        <div th:if="${error}" 
+             class="custom-alert alert-danger" 
+             role="alert">
+            <i class="bi bi-exclamation-circle-fill text-danger"></i>
+            <span class="message" th:text="${error}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
 
-	<script th:inline="javascript">
-	    let successMessage = [[${success != null}]] ? '[[${success}]]' : null;
-	    let errorMessage = [[${error != null}]] ? '[[${error}]]' : null;
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-	    function showToast(message, type='success') {
-	        if (!message) return;
-	        const toastHTML = `
-	        <div class="toast align-items-center text-bg-${type} border-0 mb-2" role="alert" aria-live="assertive" aria-atomic="true">
-	            <div class="d-flex">
-	                <div class="toast-body">${message}</div>
-	                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-	            </div>
-	        </div>`;
-	        const container = document.getElementById('toastContainer');
-	        container.insertAdjacentHTML('beforeend', toastHTML);
-	        const toastEl = container.lastElementChild;
-	        const toast = new bootstrap.Toast(toastEl);
-	        toast.show();
-	    }
-
-	    showToast(successMessage, 'success');
-	    showToast(errorMessage, 'danger');
-	</script>
+    <script>
+        // Auto-dismiss alerts after 5 seconds
+        setTimeout(function() {
+            document.querySelectorAll('.custom-alert').forEach(function(alert) {
+                new bootstrap.Alert(alert).close();
+            });
+        }, 5000);
+    </script>
 </body>
 
 </html>

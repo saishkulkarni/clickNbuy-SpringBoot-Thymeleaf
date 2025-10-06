@@ -5,86 +5,223 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ClickNBuy - Enter OTP</title>
 
-<!-- Bootstrap CSS -->
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-	rel="stylesheet">
+<!-- Bootstrap CSS & Icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+<!-- Inter Font -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
+:root {
+    --primary-color: #007bff;
+    --primary-hover: #0056b3;
+    --secondary-color: #6c757d;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --background-color: #f8f9fa;
+    --surface-color: #ffffff;
+    --text-primary: #212529;
+    --text-secondary: #6c757d;
+    --border-radius: 12px;
+    --box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
 body {
-	background-color: #f8f9fa;
-	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-	min-height: 100vh;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+    background-color: var(--background-color);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-primary);
 }
 
 .otp-container {
-	background: white;
-	padding: 35px 30px;
-	border-radius: 12px;
-	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-	width: 100%;
-	max-width: 400px;
-	text-align: center;
+    background: var(--surface-color);
+    padding: 2.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
 }
 
 .otp-container h1 {
-	color: #28a745;
-	margin-bottom: 25px;
-	font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+    font-size: 1.75rem;
 }
 
-.otp-container input[type="number"] {
-	margin-bottom: 15px;
+.otp-form {
+    margin-top: 1.5rem;
+}
+
+.input-group {
+    margin-bottom: 1.25rem;
+    position: relative;
+}
+
+.input-group .form-control {
+    padding: 0.75rem 1rem 0.75rem 2.75rem;
+    font-size: 1rem;
+    border: 1px solid #dee2e6;
+    border-radius: var(--border-radius);
+    transition: all 0.2s ease-in-out;
+}
+
+.input-group .form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.15);
+}
+
+.input-group i {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--secondary-color);
+    z-index: 4;
 }
 
 .btn-submit {
-	background-color: #28a745;
-	color: white;
-	font-weight: 600;
-	width: 100%;
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: 600;
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: var(--border-radius);
+    border: none;
+    transition: all 0.2s ease-in-out;
 }
 
 .btn-submit:hover {
-	background-color: #1e7e34;
+    background-color: var(--primary-hover);
+    transform: translateY(-1px);
+}
+
+.resend-link {
+    display: inline-block;
+    margin-top: 1rem;
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+}
+
+.resend-link:hover {
+    color: var(--primary-hover);
+    text-decoration: underline;
 }
 
 .toast-container {
-	position: fixed;
-	top: 1rem;
-	right: 1rem;
-	z-index: 1055;
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1055;
 }
 </style>
 </head>
 <body>
 
 	<div class="otp-container">
-		<h1>Enter OTP</h1>
+		<h1>
+			<i class="bi bi-shield-lock"></i> Enter OTP
+		</h1>
+		<p class="text-secondary mb-4">Please enter the verification code sent to your email</p>
 
-		<form action="/otp" method="post">
-			<input type="hidden" name="id" th:value="${id}"> <input
-				type="number" name="otp" class="form-control"
-				placeholder="Enter OTP" required>
-			<button type="submit" class="btn btn-submit mt-2">Submit</button>
+		<form action="/otp" method="post" class="otp-form needs-validation" novalidate>
+			<input type="hidden" name="id" th:value="${id}">
+			<div class="input-group">
+				<i class="bi bi-key"></i>
+				<input type="number" name="otp" class="form-control" 
+					placeholder="Enter verification code" required
+					pattern="[0-9]*" inputmode="numeric"
+					minlength="6" maxlength="6">
+				<div class="invalid-feedback">
+					Please enter a valid 6-digit OTP
+				</div>
+			</div>
+			<button type="submit" class="btn btn-submit">
+				<i class="bi bi-check2-circle me-2"></i>Verify OTP
+			</button>
 		</form>
 
-		<a th:href="'/resend-otp?id='+${id}">Resend OTP</a>
+		<a class="resend-link" th:href="'/resend-otp?id='+${id}">
+			<i class="bi bi-arrow-repeat me-1"></i>Resend verification code
+		</a>
 	</div>
 
 	<!-- Toast Container -->
 	<div class="toast-container" id="toastContainer"></div>
 
 	<!-- Bootstrap JS -->
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-	<!-- Toast Messages -->
+	<!-- Form Validation & Toast Messages -->
 	<script th:inline="javascript">
-    // Fetch messages from model
-    let successMessage = [[${success != null}]] ? '[[${success}]]' : null;
-    let errorMessage = [[${error != null}]] ? '[[${error}]]' : null;
+    document.addEventListener('DOMContentLoaded', function() {
+        // Form validation
+        const form = document.querySelector('.needs-validation');
+        if (form) {
+            form.addEventListener('submit', function(event) {
+                if (!this.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                this.classList.add('was-validated');
+            });
+        }
+
+        // Handle OTP input
+        const otpInput = document.querySelector('input[name="otp"]');
+        if (otpInput) {
+            otpInput.addEventListener('input', function(e) {
+                if (this.value.length > 6) {
+                    this.value = this.value.slice(0, 6);
+                }
+            });
+        }
+
+        // Toast Messages
+        function showToast(message, type = 'success') {
+            if (!message) return;
+
+            const toastContainer = document.getElementById('toastContainer');
+            const toastElement = document.createElement('div');
+            toastElement.className = `toast align-items-center text-bg-${type} border-0 mb-2`;
+            toastElement.setAttribute('role', 'alert');
+            toastElement.setAttribute('aria-live', 'assertive');
+            toastElement.setAttribute('aria-atomic', 'true');
+            
+            toastElement.innerHTML = `
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <i class="bi ${type === 'success' ? 'bi-check-circle' : 'bi-exclamation-circle'} me-2"></i>
+                        ${message}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            `;
+
+            toastContainer.appendChild(toastElement);
+            const toast = new bootstrap.Toast(toastElement, {
+                autohide: true,
+                delay: 3000
+            });
+            toast.show();
+        }
+
+        // Show messages if they exist
+        const success = /*[[${success}]]*/ null;
+        const error = /*[[${error}]]*/ null;
+        
+        if (success) {
+            showToast(success, 'success');
+        }
+        if (error) {
+            showToast(error, 'danger');
+        }
+    });
 
     function showToast(message, type='success') {
         if (!message) return;

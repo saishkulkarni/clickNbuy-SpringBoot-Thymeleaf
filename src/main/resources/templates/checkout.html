@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en" th:lang="${#locale}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - ClickNBuy</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #4F46E5;
+            --primary-hover: #4338CA;
+            --secondary-color: #10B981;
+            --accent-color: #F59E0B;
+            --danger-color: #EF4444;
+            --dark-color: #111827;
+            --gray-color: #6B7280;
+            --light-gray: #F3F4F6;
+            --white: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--light-gray);
+            color: var(--dark-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .checkout-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .back-btn {
+            color: var(--white);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            backdrop-filter: blur(8px);
+            transition: all 0.2s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-4px);
+            color: var(--white);
+        }
+
+        .checkout-card {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 2rem;
+        }
+
+        .order-summary-card {
+            position: sticky;
+            top: 2rem;
+        }
+
+        .product-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .product-item {
+            padding: 1rem;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .product-item:last-child {
+            border-bottom: none;
+        }
+
+        .product-image {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 0.5rem;
+        }
+
+        .payment-btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            width: 100%;
+            transition: transform 0.2s ease;
+        }
+
+        .payment-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(79, 70, 229, 0.25);
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: var(--dark-color);
+        }
+
+        .alert-container {
+            position: fixed;
+            top: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1050;
+            min-width: 300px;
+            max-width: 500px;
+            width: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Checkout Header -->
+    <div class="checkout-header">
+        <div class="container">
+            <div class="d-flex flex-column">
+                <a href="/user/cart" class="back-btn">
+                    <i class="bi bi-arrow-left-short fs-4"></i>
+                    <span>Back to Cart</span>
+                </a>
+                <h1 class="display-6 fw-bold mb-0">Checkout</h1>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout Content -->
+    <div class="container mb-5">
+        <div class="row g-4">
+            <!-- Customer Details -->
+            <div class="col-lg-8">
+                <div class="checkout-card">
+                    <h4 class="mb-4">Delivery Information</h4>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Name</label>
+                                <input type="text" class="form-control" th:value="${user.name}" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" th:value="${user.email}" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Phone</label>
+                                <input type="tel" class="form-control" th:value="${user.mobile}" readonly>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label class="form-label">Delivery Address</label>
+                                <textarea class="form-control" rows="3" placeholder="Enter your full delivery address" required></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="col-lg-4">
+                <div class="checkout-card order-summary-card">
+                    <h4 class="mb-4">Order Summary</h4>
+                    
+                    <!-- Product List -->
+                    <div class="product-list mb-4">
+                        <div class="product-item" th:each="item : ${items}">
+                            <div class="d-flex align-items-center gap-3">
+                                <img th:src="${item.product.imageLink}" th:alt="${item.product.name}" class="product-image">
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1" th:text="${item.product.name}"></h6>
+                                    <p class="mb-0 text-muted">
+                                        <small>Qty: <span th:text="${item.quantity}"></span> × ₹<span th:text="${#numbers.formatDecimal(item.product.price, 0, 2)}"></span></small>
+                                    </p>
+                                </div>
+                                <div class="text-end">
+                                    <p class="mb-0 fw-semibold">₹<span th:text="${#numbers.formatDecimal(item.quantity * item.product.price, 0, 2)}"></span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Price Details -->
+                    <div class="border-top pt-3">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Subtotal</span>
+                            <span class="fw-semibold">₹<span th:text="${#numbers.formatDecimal(total, 0, 2)}"></span></span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Shipping</span>
+                            <span class="text-success">Free</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-4">
+                            <span class="fw-semibold">Total Amount</span>
+                            <span class="fw-bold fs-5">₹<span th:text="${#numbers.formatDecimal(total, 0, 2)}"></span></span>
+                        </div>
+
+                        <button id="rzp-button" class="payment-btn">
+                            <i class="bi bi-lock-fill me-2"></i>Pay Securely
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert Container -->
+    <div class="alert-container">
+        <!-- Success Alert -->
+        <div th:if="${success}" 
+             class="alert alert-success d-flex align-items-center" 
+             role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>
+            <div th:text="${success}"></div>
+            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <!-- Error Alert -->
+        <div th:if="${error}" 
+             class="alert alert-danger d-flex align-items-center" 
+             role="alert">
+            <i class="bi bi-exclamation-circle-fill me-2"></i>
+            <div th:text="${error}"></div>
+            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Razorpay Integration -->
+    <script th:inline="javascript">
+        var options = {
+            "key": /*[[${razorpayKeyId}]]*/ '', 
+            "amount": /*[[${amount}]]*/ 0 * 100, // Amount in paise
+            "currency": "INR",
+            "name": "ClickNBuy",
+            "description": "Purchase from ClickNBuy",
+            "image": "https://your-logo-url.com/logo.png", // Replace with your logo URL
+            "order_id": /*[[${razorpayOrderId}]]*/ '', 
+            "handler": function (response) {
+                // Get delivery address
+                var address = document.querySelector('textarea[placeholder="Enter your full delivery address"]').value;
+                if (!address) {
+                    alert('Please enter a delivery address');
+                    return;
+                }
+                
+                // On successful payment
+                window.location.href = "/user/payment/success?paymentId=" + response.razorpay_payment_id + 
+                                     "&orderId=" + response.razorpay_order_id + 
+                                     "&signature=" + response.razorpay_signature +
+                                     "&address=" + encodeURIComponent(address);
+            },
+            "prefill": {
+                "name": /*[[${userName}]]*/ '',
+                "email": /*[[${userEmail}]]*/ '',
+                "contact": /*[[${userContact}]]*/ ''
+            },
+            "theme": {
+                "color": "#4F46E5"
+            }
+        };
+
+        document.getElementById('rzp-button').onclick = function(e) {
+            var rzp1 = new Razorpay(options);
+            rzp1.open();
+            e.preventDefault();
+        }
+    </script>
+
+    <!-- Auto-dismiss alerts -->
+    <script>
+        setTimeout(function() {
+            document.querySelectorAll('.alert').forEach(function(alert) {
+                var bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            });
+        }, 5000);
+    </script>
+</body>
+
+</html>

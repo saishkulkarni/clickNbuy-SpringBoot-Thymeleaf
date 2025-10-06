@@ -6,69 +6,134 @@
   <meta name="viewport" content="width=device-width"/>
   <title>Your OTP Code</title>
   <style>
-    /* Some email clients strip <style>, but most respect inline styles.
-       Keep this minimal; main styling is inline below. */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    
     @media only screen and (max-width:600px) {
       .container { width: 100% !important; padding: 16px !important; }
-      .hero { padding: 20px !important; }
-      .otp { font-size: 28px !important; letter-spacing: 4px !important; }
+      .hero { padding: 24px !important; }
+      .otp { font-size: 28px !important; letter-spacing: 6px !important; }
+      .header-logo { height: 28px !important; }
     }
   </style>
 </head>
-<body style="margin:0; padding:0; background-color:#f4f6f8; font-family: Arial, Helvetica, sans-serif; -webkit-font-smoothing:antialiased;">
-  <!-- Preheader (hidden in email preview but used by clients) -->
-  <span style="display:none; font-size:1px; color:#f4f6f8; line-height:1px; max-height:0; max-width:0; opacity:0; overflow:hidden;">
-    Use this code to verify your account — it expires in {{expiry_minutes}} minutes.
+<body style="margin:0; padding:0; background-color:#f3f4f6; font-family: 'Inter', Arial, sans-serif; -webkit-font-smoothing:antialiased;">
+  <!-- Preheader -->
+  <span style="display:none; font-size:1px; color:#f3f4f6; line-height:1px; max-height:0; max-width:0; opacity:0; overflow:hidden;">
+    Your ClickNBuy verification code is ready - valid for the next 60 minutes.
   </span>
 
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f6f8; padding: 24px 0;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f3f4f6; padding: 40px 0;">
     <tr>
       <td align="center">
-        <table role="presentation" class="container" width="600" cellpadding="0" cellspacing="0" style="width:600px; max-width:600px; background:#ffffff; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.08); overflow:hidden;">
+        <table role="presentation" class="container" width="600" cellpadding="0" cellspacing="0" style="width:600px; max-width:600px; background:#ffffff; border-radius:16px; box-shadow:0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06); overflow:hidden;">
           
           <!-- Header -->
           <tr>
-            <td style="padding:20px 28px; background: linear-gradient(90deg,#0b74de,#0b86e6); color:#ffffff;">
-              <h1 style="margin:0; font-size:20px; font-weight:600;">ClickNBuy</h1>
+            <td style="padding:32px; background: linear-gradient(135deg, #4F46E5, #4338CA); color:#ffffff; text-align:center;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td align="center">
+                    <h1 style="margin:0; font-size:24px; font-weight:700;">
+                      <i style="vertical-align:middle; margin-right:8px;">📦</i>
+                      ClickNBuy
+                    </h1>
+                    <p style="margin:8px 0 0 0; font-size:16px; opacity:0.9;">Account Verification</p>
+                  </td>
+                </tr>
+              </table>
             </td>
           </tr>
 
           <!-- Body / Hero -->
           <tr>
-            <td class="hero" style="padding:28px; text-align:left; color:#111827;">
-              <p style="margin:0 0 12px 0; font-size:16px;">Hi <span th:text="${name}"></span>,</p>
+            <td class="hero" style="padding:40px 32px; text-align:left;">
+              <p style="margin:0 0 16px 0; font-size:17px; color:#111827;">Hey <span th:text="${name}" style="font-weight:600;"></span> 👋</p>
 
-              <p style="margin:0 0 20px 0; font-size:15px; color:#374151;">
-                Use the verification code below to complete your action. This code will expire in <strong>60 minutes</strong>.
+              <p style="margin:0 0 24px 0; font-size:16px; line-height:1.5; color:#374151;">
+                Your verification code is ready. Enter this code in the app to verify your account. This code will expire in <strong style="color:#111827;">60 minutes</strong>.
               </p>
 
-              <!-- OTP block (prominent) -->
-              <div style="margin:18px 0 28px 0; text-align:center;">
-                <div style="display:inline-block; padding:20px 28px; border-radius:10px; background:#f3f8ff; border:1px solid #e6f0ff;">
-                  <span th:text="${otp}" class="otp" style="display:block; font-size:32px; font-weight:700; letter-spacing:6px; color:#0b74de;">
-                    
+              <!-- OTP block -->
+              <div style="margin:32px 0; text-align:center;">
+                <div style="display:inline-block; padding:24px 32px; border-radius:12px; background:#F3F4F6; border:2px solid #E5E7EB;">
+                  <span th:text="${otp}" class="otp" style="display:block; font-size:36px; font-weight:700; letter-spacing:8px; color:#4F46E5;">
                   </span>
                 </div>
               </div>
 
-              <p style="margin:0 0 20px 0; font-size:14px; color:#6b7280;">
-                If you didn't request this, you can safely ignore this email. Never share your verification code with anyone.
-              </p>
+              <!-- Security Notice -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:32px 0; padding:16px; background:#FFFBEB; border-radius:12px; border:1px solid #FEF3C7;">
+                <tr>
+                  <td width="24" style="padding-right:12px;">
+                    <span style="font-size:20px;">⚠️</span>
+                  </td>
+                  <td>
+                    <p style="margin:0; font-size:14px; line-height:1.5; color:#92400E;">
+                      For your security, never share this code with anyone. Our team will never ask for your verification code.
+                    </p>
+                  </td>
+                </tr>
+              </table>
 
-              <!-- Button alternative (optional) -->
-              <p style="margin:0 0 8px 0;">
-                <a href="#" style="display:inline-block; text-decoration:none; padding:10px 16px; border-radius:6px; border:1px solid #0b74de; background:#0b74de; color:#ffffff; font-weight:600; font-size:14px;">
-                  Verify now
-                </a>
+              <!-- Action Button -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td align="center">
+                    <a href="#" style="display:inline-block; text-decoration:none; padding:12px 24px; border-radius:8px; background:linear-gradient(135deg, #4F46E5, #4338CA); color:#ffffff; font-weight:600; font-size:15px; box-shadow:0 1px 2px rgba(0,0,0,0.05);">
+                      Complete Verification
+                    </a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Help Text -->
+          <tr>
+            <td style="padding:0 32px 32px;">
+              <p style="margin:0; font-size:15px; line-height:1.5; color:#6B7280;">
+                Having trouble? If you didn't request this code or need assistance, please 
+                <a href="mailto:support@clicknbuy.com" style="color:#4F46E5; text-decoration:none; font-weight:500;">contact our support team</a>.
               </p>
             </td>
           </tr>
 
           <!-- Footer -->
           <tr>
-            <td style="padding:18px 28px; background:#fbfbfd; color:#8b8f98; font-size:13px;">
-              <p style="margin:0 0 6px 0;">If you need help, contact us at <a href="mailto:{{support_email}}" style="color:#0b74de; text-decoration:none;">{{support_email}}</a>.</p>
-              <p style="margin:0;">© <span>ClickNBuy</span>. All rights reserved.</p>
+            <td style="padding:24px 32px; background:#F9FAFB; border-top:1px solid #E5E7EB;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td align="left" style="padding:0;">
+                    <p style="margin:0; color:#6B7280; font-size:13px; line-height:1.5;">
+                      © 2025 ClickNBuy. All rights reserved.
+                      <br>
+                      <a href="#" style="color:#4F46E5; text-decoration:none;">Privacy Policy</a> • 
+                      <a href="#" style="color:#4F46E5; text-decoration:none;">Terms of Service</a>
+                    </p>
+                  </td>
+                  <td align="right" style="padding:0;">
+                    <table role="presentation" cellpadding="0" cellspacing="0" style="display:inline-block;">
+                      <tr>
+                        <td style="padding:0 0 0 12px;">
+                          <a href="#" style="display:inline-block; padding:6px; border-radius:6px; background:#F3F4F6;">
+                            <img src="https://img.icons8.com/ios-glyphs/24/4F46E5/facebook-new.png" width="20" height="20" alt="Facebook" style="display:block;">
+                          </a>
+                        </td>
+                        <td style="padding:0 0 0 12px;">
+                          <a href="#" style="display:inline-block; padding:6px; border-radius:6px; background:#F3F4F6;">
+                            <img src="https://img.icons8.com/ios-glyphs/24/4F46E5/twitter.png" width="20" height="20" alt="Twitter" style="display:block;">
+                          </a>
+                        </td>
+                        <td style="padding:0 0 0 12px;">
+                          <a href="#" style="display:inline-block; padding:6px; border-radius:6px; background:#F3F4F6;">
+                            <img src="https://img.icons8.com/ios-glyphs/24/4F46E5/instagram-new.png" width="20" height="20" alt="Instagram" style="display:block;">
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
             </td>
           </tr>
 

@@ -61,12 +61,29 @@ public class UserController {
 	}
 
 	@GetMapping("/user/cart/increase/{id}")
-	public String increase(@PathVariable Long id, HttpSession session,ModelMap map) {
+	public String increase(@PathVariable Long id, HttpSession session, ModelMap map) {
 		return userService.increase(session, id, map);
 	}
-	
+
 	@GetMapping("/user/cart/decrease/{id}")
-	public String decrease(@PathVariable Long id, HttpSession session,ModelMap map) {
+	public String decrease(@PathVariable Long id, HttpSession session, ModelMap map) {
 		return userService.decrease(session, id, map);
+	}
+
+	@GetMapping("/user/checkout")
+	public String checkout(HttpSession session, Principal principal, ModelMap map) {
+		return userService.checkout(session, principal, map);
+	}
+
+	@GetMapping("/user/payment/success")
+	public String paymentSuccess(@RequestParam("paymentId") String paymentId, @RequestParam("orderId") String orderId,
+			@RequestParam("signature") String signature, @RequestParam("address") String address,Principal principal, HttpSession session,
+			ModelMap map) {
+		return userService.paymentSuccess(paymentId, orderId, signature, address,principal, session, map);
+	}
+
+	@GetMapping("/user/orders")
+	public String viewOrders(Principal principal, HttpSession session, ModelMap map) {
+		return userService.viewOrders(principal, session, map);
 	}
 }

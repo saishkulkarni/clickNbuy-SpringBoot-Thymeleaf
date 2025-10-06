@@ -19,7 +19,7 @@ public interface UserService {
 
 	String forgotPassword(String email, HttpSession session);
 
-	String resetPassword(PasswordDto passwordDto, BindingResult result, HttpSession session, Long id,ModelMap map);
+	String resetPassword(PasswordDto passwordDto, BindingResult result, HttpSession session, Long id, ModelMap map);
 
 	String addToCart(Long id, HttpSession session, Principal principal);
 
@@ -28,4 +28,11 @@ public interface UserService {
 	String increase(HttpSession session, Long id, ModelMap map);
 
 	String decrease(HttpSession session, Long id, ModelMap map);
+
+	String checkout(HttpSession session, Principal principal, ModelMap map);
+
+	String paymentSuccess(String paymentId, String orderId, String signature, String address, Principal principal, HttpSession session,
+			ModelMap map);
+
+	String viewOrders(Principal principal, HttpSession session, ModelMap map);
 }
