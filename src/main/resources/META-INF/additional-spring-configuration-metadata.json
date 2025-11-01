@@ -1,0 +1,34 @@
+{
+    "properties": [
+        {
+            "name": "cloudinary.url",
+            "type": "java.lang.String",
+            "description": "A description for 'cloudinary.url'"
+        },
+        {
+            "name": "twilio.auth.token",
+            "type": "java.lang.String",
+            "description": "A description for 'twilio.auth.token'"
+        },
+        {
+            "name": "twilio.sid",
+            "type": "java.lang.String",
+            "description": "A description for 'twilio.sid'"
+        },
+        {
+            "name": "twilio.mobile",
+            "type": "java.lang.String",
+            "description": "A description for 'twilio.mobile'"
+        },
+        {
+            "name": "razorpay.secret",
+            "type": "java.lang.String",
+            "description": "A description for 'razorpay.secret'"
+        },
+        {
+            "name": "razorpay.id",
+            "type": "java.lang.String",
+            "description": "A description for 'razorpay.id'"
+        }
+    ]
+}

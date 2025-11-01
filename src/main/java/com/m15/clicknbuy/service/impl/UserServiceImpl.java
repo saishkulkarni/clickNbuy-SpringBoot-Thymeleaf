@@ -50,10 +50,10 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	CartItemRepository itemRepository;
 
-	@Value("${razorpay.keyId}")
+	@Value("${razorpay.id}")
 	private String razorpayKeyId;
 
-	@Value("${razorpay.keySecret}")
+	@Value("${razorpay.secret}")
 	private String razorpayKeySecret;
 
 	@Autowired
@@ -325,7 +325,6 @@ public class UserServiceImpl implements UserService {
 			Principal principal,
 			HttpSession session, ModelMap map) {
 		try {
-			RazorpayClient razorpay = new RazorpayClient(razorpayKeyId, razorpayKeySecret);
 			String data = orderId + "|" + paymentId;
 			boolean isValidSignature = Utils.verifySignature(data, signature, razorpayKeySecret);
 
@@ -355,8 +354,6 @@ public class UserServiceImpl implements UserService {
 
 			// Get cart items and calculate total
 			List<CartItem> cartItems = itemRepository.findByUser(user);
-			double total = 0;
-
 			// Create order items
 			List<OrderItem> orderItems = cartItems.stream()
 				.map(cartItem -> {

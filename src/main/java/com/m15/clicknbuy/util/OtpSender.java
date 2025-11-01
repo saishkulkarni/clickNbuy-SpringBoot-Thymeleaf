@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -17,11 +18,11 @@ import jakarta.mail.internet.MimeMessage;
 @Service
 public class OtpSender {
 
-	@Value("${TWILIO_ACCOUNT_SID}")
+	@Value("${twilio.sid}")
 	String TWILIO_ACCOUNT_SID;
-	@Value("${TWILIO_AUTH_TOKEN}")
+	@Value("${twilio.auth.token}")
 	String TWILIO_AUTH_TOKEN;
-	@Value("${TWILIO_MOBILE}")
+	@Value("${twilio.mobile}")
 	String TWILIO_MOBILE;
 
 	@Autowired
@@ -30,6 +31,7 @@ public class OtpSender {
 	@Autowired
 	TemplateEngine templateEngine;
 
+	@Async
 	public void sendOtpThruEmail(String email, int otp, String name) {
 		MimeMessage message = mailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message);
@@ -48,6 +50,7 @@ public class OtpSender {
 		}
 	}
 
+	@Async
 	public void sendOtpThruMobile(Long mobile, int otp, String name) {
 		try {
 			Twilio.init(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
