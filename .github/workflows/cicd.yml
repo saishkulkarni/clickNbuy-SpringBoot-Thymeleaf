@@ -36,11 +36,7 @@ jobs:
       with:
         context: .
         push: true
-        tags: |
-          ${{ secrets.DOCKERHUB_USERNAME }}/clicknbuy:latest
-          ${{ secrets.DOCKERHUB_USERNAME }}/clicknbuy:${{ github.sha }}
-        cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/clicknbuy:buildcache
-        cache-to: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/clicknbuy:buildcache,mode=max
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/clicknbuy:latest
 
     - name: Update deployment status
       run: |
