@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ "master" ]
 
+env:
+  DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/clicknbuy
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -32,13 +35,43 @@ jobs:
         password: ${{ secrets.DOCKERHUB_TOKEN }}
         
     - name: Build and Push Docker image
+      id: docker_build
       uses: docker/build-push-action@v5
       with:
         context: .
         push: true
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/clicknbuy:latest
+        tags: ${{ env.DOCKER_IMAGE }}:latest,${{ env.DOCKER_IMAGE }}:${{ github.sha }}
 
-    - name: Update deployment status
+    - name: Image digest
+      run: echo ${{ steps.docker_build.outputs.digest }}
+
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Deploy to Render
+      env:
+        RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+        RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
       run: |
-        echo "🎉 Deployment completed successfully!"
-        echo "Docker image: ${{ secrets.DOCKERHUB_USERNAME }}/clicknbuy:${{ github.sha }}"
+        curl -X POST "https://api.render.com/v1/services/$RENDER_SERVICE_ID/deploys" \
+          -H "accept: application/json" \
+          -H "authorization: Bearer $RENDER_API_KEY" \
+          -H "content-type: application/json" \
+          -d '{
+            "clearCache": "do_not_clear",
+            "pullRequestNumber": null
+          }'
+        
+    - name: Wait for Render Deployment
+      run: |
+        echo "Waiting for deployment to complete..."
+        sleep 60  # Give some time for Render to start the deployment
+        
+    - name: Deployment Status
+      run: |
+        echo "🎉 Deployment triggered on Render"
+        echo "Check your Render dashboard for deployment status"
+        echo "Docker image used: ${{ env.DOCKER_IMAGE }}:latest"
